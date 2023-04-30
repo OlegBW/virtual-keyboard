@@ -1,0 +1,138 @@
+.basic-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background-color: rgb(58, 66, 78);
+  color: white;
+  width: 50px;
+  height: 50px;
+  position: relative;
+}
+
+.button-modifier {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  transform: translate(-50%, -50%);
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.row:last-child {
+  margin-bottom: 0px;
+}
+
+.ctrl-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background-color: rgb(28, 35, 46);
+  color: #80806b;
+  width: 75px;
+  height: 50px;
+  position: relative;
+}
+
+.enter-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background-color: rgb(28, 35, 46);
+  color: #80806b;
+  width: 110px;
+  height: 50px;
+  position: relative;
+}
+
+.meta-basic-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background-color: rgb(28, 35, 46);
+  color: #80806b;
+  width: 50px;
+  height: 50px;
+  position: relative;
+}
+
+.meta-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background-color: rgb(28, 35, 46);
+  color: #80806b;
+  width: 120px;
+  height: 50px;
+  position: relative;
+}
+
+.space-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background-color: rgb(58, 66, 78);
+  color: white;
+  width: 340px;
+  height: 50px;
+  position: relative;
+}
+
+.tab-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background-color: rgb(28, 35, 46);
+  color: #80806b;
+  width: 60px;
+  height: 50px;
+  position: relative;
+}
+
+.tilda-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background-color: #22272e;
+  color: white;
+  width: 50px;
+  height: 50px;
+  position: relative;
+}
+
+.button-modifier {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  transform: translate(-50%, -50%);
+}
+
+.backspace-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background-color: rgb(28, 35, 46);
+  color: #80806b;
+  width: 120px;
+  height: 50px;
+  position: relative;
+}
+
+/*# sourceMappingURL=main.css.map */

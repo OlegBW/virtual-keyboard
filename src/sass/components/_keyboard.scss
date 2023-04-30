@@ -1,0 +1,17 @@
+.keyboard{
+    display: flex;
+    flex-direction: column;
+}
+
+.row{
+    display: flex;
+    justify-content: space-between;
+
+    // ????
+
+    margin-bottom: 5px;
+}
+
+.row:last-child{
+    margin-bottom: 0px;
+}
