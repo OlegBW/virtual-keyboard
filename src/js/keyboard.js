@@ -1,7 +1,17 @@
+import englishLayout from "./keyboard-layouts/eng-layout.js";
+import ukrainianLayout from "./keyboard-layouts/ua-layout.js";
+
 class Keyboard{
-    constructor(dest = document.body, platform = "basic"){
+    constructor(dest = document.body, layout="eng", platform = "basic"){
         this.dest = dest;
         this.platform = platform;
+
+        if(layout === "eng"){
+            this.layout = englishLayout;
+        }
+        else if(layout === "ua"){
+            this.layout = ukrainianLayout;
+        }
     }
 
     add(){
@@ -28,6 +38,10 @@ class Keyboard{
         this.row4 = document.createElement("div");
         this.row4.className = "row";
         this.keyboard.append(this.row4);
+
+        for(let {row, content, modifier, type} of this.layout){
+            this.addButton(row, content, modifier, type);
+        }
     }
 
     addButton(row, symbol, modifier, type='basic'){
