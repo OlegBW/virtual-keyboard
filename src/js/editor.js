@@ -30,12 +30,14 @@ class Editor {
         case '':
           inputValue = ' ';
           break;
+        case 'Enter':
+          inputValue = '\n';
+          break;
         case 'Shift':
         case 'Alt':
         case 'Ctrl':
         case 'Win':
         case 'Caps Lock':
-        case 'Enter':
           inputValue = '';
           break;
         default:

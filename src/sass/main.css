@@ -47,6 +47,7 @@ body {
   background-color: rgb(206, 206, 206);
   border-radius: 5px;
   padding: 10px;
+  margin-bottom: 10px;
 }
 
 .row {
@@ -60,6 +61,12 @@ body {
 }
 
 .key {
+  transition-duration: 0.2s;
+  user-select: none;
+}
+
+.key:hover {
+  background-color: #92b9ec !important;
   transition-duration: 0.2s;
 }
 
@@ -170,6 +177,23 @@ body {
   width: 120px;
   height: 50px;
   position: relative;
+}
+
+.platform {
+  font-family: Open Sans;
+  font-size: 1.25rem;
+}
+
+.hotkey {
+  font-family: Open Sans;
+  font-size: 1.25rem;
+}
+
+.logo-caption {
+  font-family: Open Sans;
+  font-size: 2rem;
+  font-weight: bold;
+  color: rgb(28, 35, 46);
 }
 
 /*# sourceMappingURL=main.css.map */

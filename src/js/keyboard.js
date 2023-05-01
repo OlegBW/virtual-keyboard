@@ -66,6 +66,7 @@ class Keyboard {
     ];
 
     const keysPressed = new Set();
+    const modifiedKeys = ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backslash'];
 
     document.addEventListener('keydown', (event) => {
       if (!keysPressed.has(event.code) && event.code !== 'CapsLock' && keyboardLayout.includes(event.code)) {
@@ -73,7 +74,6 @@ class Keyboard {
         this.keysArr[idx].classList.toggle('key-pressed');
 
         keysPressed.add(event.code);
-        this.output(this.keysArr[idx].querySelector('.button-content').textContent);
 
         if ((keysPressed.has('ShiftLeft') || keysPressed.has('ShiftRight')) && (keysPressed.has('AltLeft') || keysPressed.has('AltRight'))) {
           this.changeLayout();
@@ -81,6 +81,12 @@ class Keyboard {
 
         if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') {
           this.changeCase();
+        }
+
+        if ((keysPressed.has('ShiftLeft') || keysPressed.has('ShiftRight')) && modifiedKeys.includes(event.code)) {
+          this.output(this.keysArr[idx].querySelector('.button-modifier').textContent);
+        } else {
+          this.output(this.keysArr[idx].querySelector('.button-content').textContent);
         }
 
         event.preventDefault();
@@ -125,7 +131,14 @@ class Keyboard {
 
       button.classList.toggle('key-pressed');
 
-      const content = button.querySelector('.button-content').textContent;
+      let content = null;
+
+      if (keysPressed.has('ShiftLeft') || keysPressed.has('ShiftRight')) {
+        content = button.querySelector('.button-modifier').textContent;
+      } else {
+        content = button.querySelector('.button-content').textContent;
+      }
+
       this.output(content);
     });
 
