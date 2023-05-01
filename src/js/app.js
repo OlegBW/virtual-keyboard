@@ -1,7 +1,5 @@
-//  import Editor from './editor';
-import Keyboard from './keyboard';
+//  import Editor from './editor.js';
+import Keyboard from './keyboard.js';
 
-const platform = (navigator.platform.includes('Mac')) ? 'mac' : 'basic';
-
-const keyboard = new Keyboard(document.body, 'ua', platform);
+const keyboard = new Keyboard(document.body, 'ua');
 keyboard.add();

@@ -1,10 +1,10 @@
-import englishLayout from './keyboard-layouts/eng-layout';
-import ukrainianLayout from './keyboard-layouts/ua-layout';
+import englishLayout from './keyboard-layouts/eng-layout.js';
+import ukrainianLayout from './keyboard-layouts/ua-layout.js';
 
 class Keyboard {
-  constructor(dest = document.body, layout = 'eng', platform = 'basic') {
+  constructor(dest = document.body, layout = 'eng') {
     this.dest = dest;
-    this.platform = platform;
+    this.case = 'lower';
 
     if (layout === 'eng') {
       this.layout = englishLayout;
@@ -16,6 +16,7 @@ class Keyboard {
   add() {
     this.keyboard = document.createElement('div');
     this.keyboard.className = 'keyboard';
+
     this.dest.append(this.keyboard);
 
     this.row0 = document.createElement('div');
@@ -45,11 +46,100 @@ class Keyboard {
 
       this.addButton(row, content, modifier, type);
     }
+
+    this.keysArr = document.querySelectorAll('.key');
+
+    const keyboardLayout = [
+      'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace',
+      'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash',
+      'Delete', 'CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter',
+      'ShiftLeft', 'IntlBackslash', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'ShiftRight',
+      'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'ControlRight', 'ArrowLeft', 'ArrowDown', 'ArrowRight',
+    ];
+
+    const keysPressed = new Set();
+
+    document.addEventListener('keydown', (event) => {
+      if (!keysPressed.has(event.code) && event.code !== 'CapsLock' && keyboardLayout.includes(event.code)) {
+        const idx = keyboardLayout.indexOf(event.code);
+        this.keysArr[idx].classList.toggle('key-pressed');
+
+        keysPressed.add(event.code);
+
+        if ((keysPressed.has('ShiftLeft') || keysPressed.has('ShiftRight')) && (keysPressed.has('AltLeft') || keysPressed.has('AltRight'))) {
+          this.layout = this.layout === englishLayout ? ukrainianLayout : englishLayout;
+          this.changeLayout();
+        }
+
+        if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') {
+          this.case = this.case === 'upper' ? 'lower' : 'upper';
+          this.changeCase();
+        }
+
+        event.preventDefault();
+      } else if (keysPressed.has(event.code) && event.code === 'CapsLock') {
+        const idx = keyboardLayout.indexOf(event.code);
+        this.keysArr[idx].classList.toggle('key-pressed');
+        keysPressed.delete('CapsLock');
+
+        this.case = 'lower';
+        this.changeCase();
+        event.preventDefault();
+      } else if (!keysPressed.has(event.code) && event.code === 'CapsLock') {
+        const idx = keyboardLayout.indexOf(event.code);
+        this.keysArr[idx].classList.toggle('key-pressed');
+        keysPressed.add(event.code);
+
+        this.case = 'upper';
+        this.changeCase();
+        event.preventDefault();
+      }
+    });
+
+    document.addEventListener('keyup', (event) => {
+      if (keysPressed.has(event.code) && event.code !== 'CapsLock') {
+        const idx = keyboardLayout.indexOf(event.code);
+
+        this.keysArr[idx].classList.toggle('key-pressed');
+        keysPressed.delete(event.code);
+
+        if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') {
+          this.case = this.case === 'upper' ? 'lower' : 'upper';
+          this.changeCase();
+        }
+
+        event.preventDefault();
+      }
+    });
+
+    this.keyboard.addEventListener('mousedown', (event) => {
+      const button = event.target.closest('.key');
+
+      if (!button) return;
+
+      if (!this.keyboard.contains(button)) return;
+
+      button.classList.toggle('key-pressed');
+
+      const content = button.querySelector('.button-content').textContent;
+      console.log(content);
+    });
+
+    this.keyboard.addEventListener('mouseup', (event) => {
+      const button = event.target.closest('.key');
+
+      if (!button) return;
+
+      if (!this.keyboard.contains(button)) return;
+
+      button.classList.toggle('key-pressed');
+    });
   }
 
   addButton(row, symbol, modifier, type = 'basic') {
     const rowNum = `row${row}`;
     const button = document.createElement('div');
+    const buttonContent = document.createElement('div');
 
     switch (type) {
       case 'basic':
@@ -83,16 +173,57 @@ class Keyboard {
         break;
     }
 
-    button.textContent = symbol;
+    button.classList.add('key');
 
-    if (modifier) {
-      const buttonModifier = document.createElement('div');
-      buttonModifier.className = 'button-modifier';
-      buttonModifier.textContent = modifier;
-      button.append(buttonModifier);
+    if (this.case === 'lower') {
+      buttonContent.textContent = symbol.toLowerCase();
+    } else if (this.case === 'upper') {
+      buttonContent.textContent = symbol.toUpperCase();
     }
 
+    buttonContent.className = 'button-content';
+    button.append(buttonContent);
+    const buttonModifier = document.createElement('div');
+    buttonModifier.className = 'button-modifier';
+
+    if (modifier) {
+      buttonModifier.textContent = modifier;
+    }
+
+    button.append(buttonModifier);
     this[rowNum].append(button);
+  }
+
+  changeCase() {
+    if (this.case === 'upper') {
+      for (let i = 0; i < this.keysArr.length; i += 1) {
+        if (this.keysArr[i].classList.contains('basic-button')) {
+          const buttonContent = this.keysArr[i].querySelector('.button-content');
+          buttonContent.textContent = buttonContent.textContent.toUpperCase();
+        }
+      }
+    } else if (this.case === 'lower') {
+      for (let i = 0; i < this.keysArr.length; i += 1) {
+        if (this.keysArr[i].classList.contains('basic-button')) {
+          const buttonContent = this.keysArr[i].querySelector('.button-content');
+          buttonContent.textContent = buttonContent.textContent.toLowerCase();
+        }
+      }
+    }
+  }
+
+  changeLayout() {
+    if (this.layout === ukrainianLayout) {
+      for (let i = 0; i < this.keysArr.length; i += 1) {
+        this.keysArr[i].querySelector('.button-content').textContent = englishLayout[i].content;
+        this.keysArr[i].querySelector('.button-modifier').textContent = englishLayout[i].modifier;
+      }
+    } else if (this.layout === englishLayout) {
+      for (let i = 0; i < this.keysArr.length; i += 1) {
+        this.keysArr[i].querySelector('.button-content').textContent = ukrainianLayout[i].content;
+        this.keysArr[i].querySelector('.button-modifier').textContent = ukrainianLayout[i].modifier;
+      }
+    }
   }
 }
 
