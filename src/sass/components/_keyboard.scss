@@ -1,0 +1,38 @@
+.keyboard{
+    display: flex;
+    flex-direction: column;
+    width: 850px;
+    font-family: "Open Sans";
+    background-color: rgb(206, 206, 206);
+    border-radius: 5px;
+    padding: 10px;
+
+    margin-bottom: 10px;
+}
+
+.row{
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 5px;
+}
+
+.row:last-child{
+    margin-bottom: 0px;
+}
+
+.key{
+    transition-duration: 0.2s;
+    user-select: none;
+}
+
+.key:hover{
+    background-color:  #92b9ec !important;
+    transition-duration: 0.2s;
+}
+
+.key-pressed{
+    background-color:  #92b9ec !important;
+    border-radius: 25px !important;
+    transition-duration: 0.2s;
+}

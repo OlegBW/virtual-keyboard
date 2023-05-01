@@ -1,0 +1,13 @@
+.enter-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 5px;
+    background-color: $secondary-button;
+    color: $secondary-symbol;
+    width: 110px;
+    height: 50px;
+
+    position: relative;
+}

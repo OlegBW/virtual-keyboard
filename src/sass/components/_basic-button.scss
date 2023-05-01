@@ -1,0 +1,20 @@
+.basic-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 5px;
+    background-color: $primary-button;
+    color: $primary-symbol;
+    width: 50px;
+    height: 50px;
+
+    position: relative;
+}
+
+.button-modifier{
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    transform: translate(-50%, -50%);
+}
