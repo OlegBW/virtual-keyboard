@@ -2,13 +2,21 @@ import englishLayout from './keyboard-layouts/eng-layout.js';
 import ukrainianLayout from './keyboard-layouts/ua-layout.js';
 
 class Keyboard {
-  constructor(dest = document.body, layout = 'eng') {
+  constructor(output, dest = document.body, layout = 'eng') {
+    const cookies = document.cookie.split('; ');
+
+    let layoutType = cookies.find((cookie) => cookie.startsWith('lang'));
+    layoutType = layoutType ? layoutType.split('=')[1] : null;
+
     this.dest = dest;
     this.case = 'lower';
+    this.output = output;
 
-    if (layout === 'eng') {
+    layoutType = layoutType ?? layout;
+
+    if (layoutType === 'eng') {
       this.layout = englishLayout;
-    } else if (layout === 'ua') {
+    } else if (layoutType === 'ua') {
       this.layout = ukrainianLayout;
     }
   }
@@ -65,14 +73,13 @@ class Keyboard {
         this.keysArr[idx].classList.toggle('key-pressed');
 
         keysPressed.add(event.code);
+        this.output(this.keysArr[idx].querySelector('.button-content').textContent);
 
         if ((keysPressed.has('ShiftLeft') || keysPressed.has('ShiftRight')) && (keysPressed.has('AltLeft') || keysPressed.has('AltRight'))) {
-          this.layout = this.layout === englishLayout ? ukrainianLayout : englishLayout;
           this.changeLayout();
         }
 
         if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') {
-          this.case = this.case === 'upper' ? 'lower' : 'upper';
           this.changeCase();
         }
 
@@ -82,7 +89,6 @@ class Keyboard {
         this.keysArr[idx].classList.toggle('key-pressed');
         keysPressed.delete('CapsLock');
 
-        this.case = 'lower';
         this.changeCase();
         event.preventDefault();
       } else if (!keysPressed.has(event.code) && event.code === 'CapsLock') {
@@ -90,7 +96,6 @@ class Keyboard {
         this.keysArr[idx].classList.toggle('key-pressed');
         keysPressed.add(event.code);
 
-        this.case = 'upper';
         this.changeCase();
         event.preventDefault();
       }
@@ -104,7 +109,6 @@ class Keyboard {
         keysPressed.delete(event.code);
 
         if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') {
-          this.case = this.case === 'upper' ? 'lower' : 'upper';
           this.changeCase();
         }
 
@@ -122,7 +126,7 @@ class Keyboard {
       button.classList.toggle('key-pressed');
 
       const content = button.querySelector('.button-content').textContent;
-      console.log(content);
+      this.output(content);
     });
 
     this.keyboard.addEventListener('mouseup', (event) => {
@@ -134,6 +138,8 @@ class Keyboard {
 
       button.classList.toggle('key-pressed');
     });
+
+    this.changeCase();
   }
 
   addButton(row, symbol, modifier, type = 'basic') {
@@ -175,11 +181,7 @@ class Keyboard {
 
     button.classList.add('key');
 
-    if (this.case === 'lower') {
-      buttonContent.textContent = symbol.toLowerCase();
-    } else if (this.case === 'upper') {
-      buttonContent.textContent = symbol.toUpperCase();
-    }
+    buttonContent.textContent = symbol;
 
     buttonContent.className = 'button-content';
     button.append(buttonContent);
@@ -202,6 +204,7 @@ class Keyboard {
           buttonContent.textContent = buttonContent.textContent.toUpperCase();
         }
       }
+      this.case = 'lower';
     } else if (this.case === 'lower') {
       for (let i = 0; i < this.keysArr.length; i += 1) {
         if (this.keysArr[i].classList.contains('basic-button')) {
@@ -209,6 +212,7 @@ class Keyboard {
           buttonContent.textContent = buttonContent.textContent.toLowerCase();
         }
       }
+      this.case = 'upper';
     }
   }
 
@@ -218,11 +222,15 @@ class Keyboard {
         this.keysArr[i].querySelector('.button-content').textContent = englishLayout[i].content;
         this.keysArr[i].querySelector('.button-modifier').textContent = englishLayout[i].modifier;
       }
+      this.layout = englishLayout;
+      document.cookie = 'lang=eng';
     } else if (this.layout === englishLayout) {
       for (let i = 0; i < this.keysArr.length; i += 1) {
         this.keysArr[i].querySelector('.button-content').textContent = ukrainianLayout[i].content;
         this.keysArr[i].querySelector('.button-modifier').textContent = ukrainianLayout[i].modifier;
       }
+      this.layout = ukrainianLayout;
+      document.cookie = 'lang=ua';
     }
   }
 }
